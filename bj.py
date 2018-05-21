@@ -2,6 +2,7 @@
 #練習用プログラム　ブラックジャックゲームの作成
 
 import random
+import sys
 
 # プレイヤーベースクラス
 class playerBase:
@@ -116,18 +117,50 @@ def main():
         print("カードを引きますか？[y/n]")
         ans = input()
         if ans == "n":
+            # スタンド
+            print("スタンド！")
             break
         elif ans == "y":
+            # ヒット
+            print("ヒット！")
             newcard = myDeck.draw()
             pl.drawMessage(newcard)
             pl.getPointMessage()
-            if pl.getPoint > 21:
+            if pl.getPoint() > 21:
                 # バスト！！
-                print("バスト！！あなたの負けです")
-                break
-            elif pl.getPoint == 21:
+                print("バスト！！あなたの負けです\r\n")
+                sys.exit()
+            elif pl.getPoint() == 21:
                 # ブラックジャック！
+                print("ブラックジャックです\r\n")
                 break
+
+    print("ディーラーのターンです")
+    derlerPoint = dl.getPoint()
+    print("ディーラーのホールカードオープン\r\nカード合計値は" + str(derlerPoint) + "です")
+    while True:
+        if derlerPoint >= 17:
+            print("ディーラーはカードを引き終わりました\r\n")
+            break
+        else:
+            newcard = myDeck.draw()
+            dl.drawMessage(newcard)
+            dl.tefuda.append(newcard)
+            derlerPoint = dl.getPoint()
+
+    print("勝負！\r\n")
+
+    print("プレイヤー[" + str(pl.getPoint()) + "] vs [" + str(dl.getPoint()) + "]ディーラー" )
+
+    if pl.getPoint() == dl.getPoint():
+        # ドロー
+        print("ドロー！引き分けです")
+    elif dl.getPoint() > 21 or pl.getPoint() > dl.getPoint():
+        # プレイヤーＷＩＮ
+        print("あなたの勝ちです！")
+    else:
+        # プレイヤーＬＯＳＥ
+        print("あなたの負けです")
 
     print("ゲームを終了します")
 
