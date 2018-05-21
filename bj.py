@@ -16,13 +16,22 @@ class playerBase:
         else:
             return total
 
+    def getPointMessage(self):
+        totalPoint = self.getPoint()
+        print("カードの合計値は" + str(totalPoint) + "になりました\r\n")
+
+    def drawMessage(self,drawcard):
+        pass
+
 # プレイヤークラス
 class player(playerBase):
-    pass
+    def drawMessage(self,drawcard):
+        print(drawcard.getmark() + "の" + drawcard.getpict() + "を引きました")
 
 # ディーラークラス
 class dealer(playerBase):
-    pass
+    def drawMessage(self,drawcard):
+        print("ディーラーは" + drawcard.getmark() + "の" + drawcard.getpict() + "を引きました")
 
 # デッキクラス
 class deck:
@@ -83,29 +92,44 @@ def main():
     print("ブラックジャックゲームを開始します\r\n")
 
     # プレイヤー初期セット
+    # １枚目ドロー
     newcard = myDeck.draw()
-    print(newcard.getmark() + "の" + newcard.getpict() + "を引きました")
+    pl.drawMessage(newcard)
     pl.tefuda.append(newcard)
+    # ２枚目ドロー
     newcard = myDeck.draw()
-    print(newcard.getmark() + "の" + newcard.getpict() + "を引きました")
+    pl.drawMessage(newcard)
     pl.tefuda.append(newcard)
-    print("カードの合計値は" + str(pl.getPoint()) + "になりました\r\n")
+    pl.getPointMessage()
     
     # ディーラー初期セット
+    # １枚目ドロー
     newcard = myDeck.draw()
-    print("ディーラーは" + newcard.getmark() + "の" + newcard.getpict() + "を引きました")
+    dl.drawMessage(newcard)
     dl.tefuda.append(newcard)
+    # ２枚目ドロー
     newcard = myDeck.draw()
     print("ディーラーはもう１枚のカードを引きました\r\n")
     dl.tefuda.append(newcard)
     
-    print("カードを引きますか？[y/n]")
     while True:
+        print("カードを引きますか？[y/n]")
         ans = input()
         if ans == "n":
             break
         elif ans == "y":
             newcard = myDeck.draw()
+            pl.drawMessage(newcard)
+            pl.getPointMessage()
+            if pl.getPoint > 21:
+                # バスト！！
+                print("バスト！！あなたの負けです")
+                break
+            elif pl.getPoint == 21:
+                # ブラックジャック！
+                break
+
+    print("ゲームを終了します")
 
     
     
